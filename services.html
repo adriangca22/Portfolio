@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Render Fotorealista | Carrusel Soda & Laptop</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#07000d;
+      overflow:hidden;
+    }
+
+    .hero{
+      width:100%;
+      height:100vh;
+      position:relative;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:0 9%;
+
+      overflow:hidden;
+
+      background:
+      radial-gradient(circle at center,
+      rgba(183,0,255,.35) 0%,
+      rgba(90,0,120,.25) 30%,
+      rgba(10,0,20,1) 75%);
+    }
+
+    /* GRID BACKGROUND */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+
+      background-image:
+      linear-gradient(rgba(255,0,255,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,0,255,.08) 1px, transparent 1px);
+
+      background-size:32px 32px;
+
+      mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+      opacity:.55;
+    }
+
+    /* CARD - MÁS CUADRADA Y CON MENOS ALTURA */
+    .card{
+      position:relative;
+      z-index:2;
+
+      width:320px;
+
+      /* Padding reducido para hacerlo más cuadrado y menos alto */
+      padding:20px 28px;
+
+      border-radius:28px;
+
+      background:#090814;
+
+      border:1px solid rgba(255,0,255,.2);
+
+      /* BOX SHADOW MÁS NOTORIA EN NEGRO */
+      box-shadow:
+      0 25px 50px -12px rgba(0,0,0,0.8),
+      0 0 0 1px rgba(255,255,255,.02) inset,
+      0 0 30px rgba(255,0,255,.15);
+
+      text-align:center;
+    }
+
+    .icon-wrap{
+      width:65px;
+      height:65px;
+
+      margin:0 auto 14px;
+
+      border-radius:20px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border:2px solid #ff00ff33;
+
+      box-shadow:
+      0 0 15px rgba(255,0,255,.2);
+
+      background:#120b24;
+    }
+
+    .cube{
+      width:30px;
+      height:30px;
+
+      border:4px solid #fff;
+      border-radius:8px;
+
+      transform:rotate(45deg);
+
+      position:relative;
+    }
+
+    .cube::after{
+      content:"";
+      position:absolute;
+
+      width:12px;
+      height:12px;
+
+      background:#fff;
+
+      right:-5px;
+      top:6px;
+    }
+
+    .card h1{
+      color:#fff;
+      font-size:1.65rem;
+      line-height:1.1;
+
+      margin-bottom:8px;
+
+      font-weight:700;
+    }
+
+    .card p{
+      color:#e3e3e3;
+
+      font-size:.8rem;
+      line-height:1.35;
+
+      font-weight:300;
+
+      margin-bottom:14px;
+    }
+
+    .blender{
+      width:55px;
+
+      margin-bottom:14px;
+
+      filter:drop-shadow(0 0 10px rgba(255,170,0,.3));
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+
+      width:155px;
+      height:46px;
+
+      border-radius:40px;
+
+      text-decoration:none;
+
+      color:#fff;
+      font-weight:600;
+      letter-spacing:.5px;
+
+      border:2px solid rgba(255,0,255,.25);
+
+      background:
+      linear-gradient(180deg,
+      rgba(255,0,255,.08),
+      rgba(255,0,255,.02));
+
+      box-shadow:
+      inset 0 0 10px rgba(255,0,255,.1),
+      0 0 15px rgba(255,0,255,.08);
+
+      transition:.3s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-3px);
+
+      box-shadow:
+      0 10px 25px rgba(255,0,255,.25);
+    }
+
+    /* CARRUSEL - CONTAINER */
+    .soda-area{
+      position:relative;
+      z-index:2;
+
+      width:50%;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
+
+      margin-right:120px;
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .carousel-track {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .carousel-item {
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      transform: rotate(-18deg) scale(0.85) translateY(30px);
+      transition: opacity 0.5s cubic-bezier(0.3, 0.9, 0.4, 1.1), transform 0.5s cubic-bezier(0.2, 0.85, 0.3, 1);
+      filter: drop-shadow(0 40px 30px rgba(0,0,0,.8)) drop-shadow(0 0 20px rgba(255,0,255,.2));
+      pointer-events: none;
+    }
+
+    .carousel-item.active {
+      opacity: 1;
+      transform: rotate(-18deg) scale(1) translateY(0px);
+      z-index: 20;
+    }
+
+    .soda-gif, .laptop-gif {
+      width: 100%;
+      max-width: 500px;
+      display: block;
+      margin: 0 auto;
+      animation: floatItem 4s ease-in-out infinite;
+    }
+
+    @keyframes floatItem {
+      0%,100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-18px);
+      }
+    }
+
+    /* SHADOW - DEBAJO DEL PRODUCTO ACTIVO */
+    .dynamic-shadow {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 380px;
+      height: 35px;
+      background: radial-gradient(ellipse, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 80%);
+      filter: blur(12px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      transition: width 0.4s ease, opacity 0.3s ease;
+    }
+
+    /* INDICADORES */
+    .carousel-indicators {
+      position: absolute;
+      bottom: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 16px;
+      z-index: 25;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      padding: 6px 18px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 0, 255, 0.3);
+    }
+
+    .indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background: #ff44ff;
+      width: 24px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px #ff44ff;
+    }
+
+    .indicator:hover {
+      background: #ff88ff;
+      transform: scale(1.2);
+    }
+
+    @media(max-width:1000px){
+
+      .hero{
+        flex-direction:column;
+        justify-content:center;
+
+        gap:60px;
+
+        padding:40px 20px;
+      }
+
+      .soda-area{
+        width:100%;
+        justify-content:center;
+        margin-right:0;
+      }
+
+      .carousel-track {
+        width: 300px;
+        height: 300px;
+      }
+
+      .soda-gif, .laptop-gif {
+        max-width: 300px;
+      }
+
+      .dynamic-shadow {
+        width: 240px;
+        height: 25px;
+        bottom: -25px;
+      }
+    }
+
+    @media(max-width:480px){
+      .card{
+        width:90%;
+        padding:18px 20px;
+      }
+      
+      .card h1{
+        font-size:1.4rem;
+      }
+      
+      .carousel-track {
+        width: 260px;
+        height: 260px;
+      }
+
+      .soda-gif, .laptop-gif {
+        max-width: 260px;
+      }
+
+      .dynamic-shadow{
+        width: 200px;
+        height: 20px;
+        bottom: -20px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+
+    <!-- CARD - MÁS CUADRADA -->
+    <div class="card">
+
+      <div class="icon-wrap">
+        <div class="cube"></div>
+      </div>
+
+      <h1>Render Fotorealista</h1>
+
+      <p>
+        Visualización en alta fidelidad para exhibir productos,
+        packaging y previsualización de proyectos, estrategia
+        de branding con imágenes comerciales.
+      </p>
+
+      <!-- Blender -->
+      <img
+        class="blender"
+        src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg"
+        alt="Blender"
+      >
+
+      <br>
+
+      <a href="#" class="btn">
+        COTIZAR
+      </a>
+
+    </div>
+
+    <!-- CARRUSEL: SODA.GIF y LAPTOP.GIF -->
+    <div class="soda-area">
+      <div class="carousel-container">
+        <div class="carousel-track">
+          <!-- Soda GIF -->
+          <div class="carousel-item" id="item-soda">
+            <img src="soda.gif" alt="Soda" class="soda-gif">
+          </div>
+          <!-- Laptop GIF -->
+          <div class="carousel-item" id="item-laptop">
+            <img src="laptop.gif" alt="Laptop" class="laptop-gif">
+          </div>
+        </div>
+        <div class="dynamic-shadow" id="dynamicShadow"></div>
+      </div>
+
+      <!-- Indicadores -->
+      <div class="carousel-indicators">
+        <div class="indicator" data-index="0" id="indicator-soda"></div>
+        <div class="indicator" data-index="1" id="indicator-laptop"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <script>
+    (function() {
+      const sodaItem = document.getElementById('item-soda');
+      const laptopItem = document.getElementById('item-laptop');
+      const indicatorSoda = document.getElementById('indicator-soda');
+      const indicatorLaptop = document.getElementById('indicator-laptop');
+      const shadowDiv = document.getElementById('dynamicShadow');
+
+      let currentIndex = 0; // 0: soda, 1: laptop
+      let intervalId = null;
+      let isTransitioning = false;
+
+      function setActiveItem(index) {
+        if (isTransitioning) return;
+        if (index === currentIndex) return;
+        
+        isTransitioning = true;
+        
+        // Cambio de clases
+        if (index === 0) {
+          sodaItem.classList.add('active');
+          laptopItem.classList.remove('active');
+          
+          // Ajustar sombra para soda
+          if (shadowDiv) {
+            let width = window.innerWidth <= 1000 ? '240px' : '380px';
+            shadowDiv.style.width = width;
+            shadowDiv.style.background = 'radial-gradient(ellipse, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 80%)';
+          }
+          
+          indicatorSoda.classList.add('active');
+          indicatorLaptop.classList.remove('active');
+          currentIndex = 0;
+        } else {
+          laptopItem.classList.add('active');
+          sodaItem.classList.remove('active');
+          
+          // Ajustar sombra para laptop
+          if (shadowDiv) {
+            let width = window.innerWidth <= 1000 ? '260px' : '400px';
+            shadowDiv.style.width = width;
+            shadowDiv.style.background = 'radial-gradient(ellipse, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 50%, transparent 80%)';
+          }
+          
+          indicatorSoda.classList.remove('active');
+          indicatorLaptop.classList.add('active');
+          currentIndex = 1;
+        }
+        
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 550);
+      }
+
+      function nextSlide() {
+        if (isTransitioning) return;
+        let nextIndex = currentIndex === 0 ? 1 : 0;
+        setActiveItem(nextIndex);
+      }
+
+      function startCarousel() {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = setInterval(() => {
+          nextSlide();
+        }, 4000); // BUCLE CADA 4 SEGUNDOS
+      }
+
+      function stopCarousel() {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      function resetCarouselTimer() {
+        stopCarousel();
+        startCarousel();
+      }
+
+      // Eventos de los indicadores
+      indicatorSoda.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentIndex !== 0 && !isTransitioning) {
+          setActiveItem(0);
+          resetCarouselTimer();
+        }
+      });
+
+      indicatorLaptop.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentIndex !== 1 && !isTransitioning) {
+          setActiveItem(1);
+          resetCarouselTimer();
+        }
+      });
+
+      // Pausa al hacer hover sobre el área del carrusel
+      const carouselContainer = document.querySelector('.carousel-container');
+      if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', () => {
+          stopCarousel();
+        });
+        carouselContainer.addEventListener('mouseleave', () => {
+          if (!intervalId) startCarousel();
+        });
+      }
+
+      // Ajustar sombra al redimensionar
+      window.addEventListener('resize', () => {
+        if (shadowDiv) {
+          if (window.innerWidth <= 1000) {
+            shadowDiv.style.width = currentIndex === 0 ? '240px' : '260px';
+          } else {
+            shadowDiv.style.width = currentIndex === 0 ? '380px' : '400px';
+          }
+        }
+      });
+
+      // Inicializar (soda activo primero)
+      sodaItem.classList.add('active');
+      laptopItem.classList.remove('active');
+      indicatorSoda.classList.add('active');
+      indicatorLaptop.classList.remove('active');
+      currentIndex = 0;
+      if (shadowDiv) {
+        let initialWidth = window.innerWidth <= 1000 ? '240px' : '380px';
+        shadowDiv.style.width = initialWidth;
+      }
+      
+      startCarousel();
+
+      // Limpiar al salir
+      window.addEventListener('beforeunload', () => {
+        if (intervalId) clearInterval(intervalId);
+      });
+    })();
+  </script>
+
+</body>
+</html>
