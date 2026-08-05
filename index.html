@@ -1236,5 +1236,80 @@
             });
         });
     </script>
+    <script>
+/* ---------- HERO: typing rotatorio ---------- */
+(function() {
+    const words = ['Adrián', 'Frontend Dev', 'UI/UX Designer', 'Creative Coder', 'Web Designer'];
+    let wordIdx = 0, charIdx = 0, isDeleting = false;
+    const rotator = document.getElementById('rotatorWord');
+    if (!rotator) return;
+    function rotate() {
+        const current = words[wordIdx];
+        charIdx = isDeleting ? charIdx - 1 : charIdx + 1;
+        rotator.textContent = current.substring(0, charIdx);
+        let speed = isDeleting ? 50 : 110;
+        if (!isDeleting && charIdx === current.length) { speed = 2000; isDeleting = true; }
+        else if (isDeleting && charIdx === 0) { isDeleting = false; wordIdx = (wordIdx + 1) % words.length; speed = 300; }
+        setTimeout(rotate, speed);
+    }
+    setTimeout(rotate, 1000);
+})();
+
+/* ---------- HERO: partículas (solo dentro del hero) ---------- */
+(function() {
+    const canvas = document.getElementById('heroParticles');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    const hero = canvas.closest('.hero');
+    const particles = [];
+    let cW, cH, mx = -9999, my = -9999;
+    const COUNT = window.innerWidth < 768 ? 25 : 55;
+    const CONNECT = 120, CONNECT_SQ = CONNECT * CONNECT, MOUSE_R = 140;
+
+    function resize() { cW = canvas.width = hero.offsetWidth; cH = canvas.height = hero.offsetHeight; }
+    resize();
+    let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(resize, 200); });
+
+    hero.addEventListener('mousemove', e => {
+        const r = canvas.getBoundingClientRect();
+        mx = e.clientX - r.left; my = e.clientY - r.top;
+    }, { passive: true });
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * cW; this.y = Math.random() * cH;
+            this.vx = (Math.random() - 0.5) * 0.4; this.vy = (Math.random() - 0.5) * 0.4;
+            this.r = Math.random() * 1.5 + 0.8;
+        }
+        update() {
+            this.x += this.vx; this.y += this.vy;
+            if (this.x < 0 || this.x > cW) this.vx *= -1;
+            if (this.y < 0 || this.y > cH) this.vy *= -1;
+            const dx = mx - this.x, dy = my - this.y;
+            if (dx*dx + dy*dy < MOUSE_R * MOUSE_R) { this.x -= dx * 0.01; this.y -= dy * 0.01; }
+        }
+    }
+    for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+
+    function render() {
+        ctx.clearRect(0, 0, cW, cH);
+        ctx.fillStyle = 'rgba(61, 125, 255, 0.7)';
+        for (const p of particles) { p.update(); ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill(); }
+        for (let a = 0; a < particles.length; a++) {
+            for (let b = a + 1; b < particles.length; b++) {
+                const dx = particles[a].x - particles[b].x, dy = particles[a].y - particles[b].y;
+                const d2 = dx*dx + dy*dy;
+                if (d2 < CONNECT_SQ) {
+                    ctx.strokeStyle = `rgba(61, 125, 255, ${(1 - Math.sqrt(d2) / CONNECT) * 0.35})`;
+                    ctx.lineWidth = 0.6; ctx.beginPath();
+                    ctx.moveTo(particles[a].x, particles[a].y); ctx.lineTo(particles[b].x, particles[b].y); ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+})();
+</script>
 </body>
 </html>
