@@ -735,6 +735,218 @@
                 transform-origin: top left;
             }
         }
+        /* ========== HERO INTEGRADO ========== */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 110px 50px 60px; /* deja libre el header fijo del index */
+    overflow: hidden;
+    background: #0a0a0a;
+    color: #fff;
+}
+/* fondo AHORA absoluto dentro del hero (antes era fixed y pisaba toda la página) */
+.hero-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.hero-bg::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 40%, rgba(18, 63, 174, 0.18), rgba(0, 0, 0, 0.95)); z-index: 1;
+}
+.hero-bg .grid-floor {
+    position: absolute; bottom: 0; left: -50%; width: 200%; height: 60%;
+    background-image: linear-gradient(rgba(61, 125, 255, 0.15) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(61, 125, 255, 0.15) 1px, transparent 1px);
+    background-size: 50px 50px; transform: perspective(500px) rotateX(60deg); transform-origin: center bottom;
+    mask-image: linear-gradient(to top, #000 0%, rgba(0,0,0,0.3) 50%, transparent 90%);
+    -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0,0,0,0.3) 50%, transparent 90%);
+    animation: gridMove 20s linear infinite; z-index: 1;
+}
+@keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 50px; } }
+
+.hero-bg .blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; animation: floatBlob 20s ease-in-out infinite; z-index: 0; }
+.blob-1 { width: 400px; height: 400px; background: radial-gradient(circle, var(--accent), var(--accent-dark)); top: 10%; left: -100px; }
+.blob-2 { width: 500px; height: 500px; background: radial-gradient(circle, var(--accent-light), #0B2C82); bottom: -150px; right: -100px; animation-delay: 5s; opacity: 0.3; }
+.blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, #0B2C82, #050f2e); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 10s; opacity: 0.25; }
+.blob-4 { width: 350px; height: 350px; background: radial-gradient(circle, #2E5FDB, #0A1F5C); top: 60%; left: 20%; animation-delay: 15s; opacity: 0.2; }
+.blob-5 { width: 280px; height: 280px; background: radial-gradient(circle, var(--accent), var(--accent-dark)); top: 15%; right: 10%; animation-delay: 8s; opacity: 0.25; }
+@keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -50px) scale(1.1); }
+    66% { transform: translate(-30px, 40px) scale(0.95); }
+}
+.blob-3 { animation-name: floatBlob3; }
+@keyframes floatBlob3 {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    33% { transform: translate(calc(-50% + 50px), calc(-50% - 50px)) scale(1.1); }
+    66% { transform: translate(calc(-50% - 30px), calc(-50% + 40px)) scale(0.95); }
+}
+
+#heroParticles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+.hero-content {
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1400px; margin: 0 auto; width: 100%; gap: 80px; position: relative; z-index: 15;
+}
+.hero-text { flex: 1; max-width: 600px; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.hero-text h1 { font-size: 56px; line-height: 1.15; margin-bottom: 20px; font-weight: 800; color: white; animation: slideUp 0.8s ease-out 0.1s both; }
+.rotator-wrapper { display: inline-block; position: relative; min-height: 1.15em; }
+.rotator-word { color: var(--accent-light); text-shadow: 0 0 12px rgba(61, 125, 255, 0.5); }
+.rotator-word::after {
+    content: ''; position: absolute; right: -4px; top: 10%; width: 3px; height: 80%;
+    background: var(--accent-light); animation: blinkCursor 0.9s step-end infinite; box-shadow: 0 0 8px var(--accent-light);
+}
+@keyframes blinkCursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.hero-text p { font-size: 16px; color: #b5b9c4; line-height: 1.6; margin-bottom: 30px; max-width: 500px; animation: slideUp 0.8s ease-out 0.2s both; }
+
+.hero-buttons { display: flex; gap: 15px; margin-bottom: 20px; animation: slideUp 0.8s ease-out 0.3s both; }
+
+.btn-primary, .btn-secondary {
+    padding: 12px 25px; border-radius: 40px; cursor: pointer; font-weight: 700; font-size: 15px;
+    transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+    font-family: inherit;
+}
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #fff; border: none;
+    box-shadow: 0 4px 15px rgba(18, 63, 174, 0.4); position: relative; overflow: hidden;
+}
+.btn-primary::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s;
+}
+.btn-primary:hover::before { left: 100%; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(18, 63, 174, 0.6); }
+.btn-secondary {
+    background: rgba(18, 63, 174, 0.15); backdrop-filter: blur(8px); color: #fff;
+    border: 1px solid rgba(18, 63, 174, 0.6);
+}
+.btn-secondary:hover { background: rgba(18, 63, 174, 0.35); transform: translateY(-2px); border-color: var(--accent); }
+
+.availability-inline {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px; border-radius: 50px;
+    background: rgba(61, 125, 255, 0.08);
+    border: 1px solid rgba(61, 125, 255, 0.2);
+    animation: slideUp 0.8s ease-out 0.4s both;
+}
+.availability-inline .status-dot {
+    width: 7px; height: 7px; background: #22c55e; border-radius: 50%;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.8), 0 0 12px rgba(34, 197, 94, 0.4);
+    animation: pulseGreen 2s ease-in-out infinite; flex-shrink: 0;
+}
+@keyframes pulseGreen { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+.availability-inline .badge-text {
+    font-size: 0.7rem; font-weight: 600; color: #ffffff;
+    letter-spacing: 0.8px; text-transform: uppercase;
+}
+
+.photo-wrapper {
+    flex: 1; display: flex; justify-content: center; align-items: center;
+    position: relative; animation: slideUp 0.8s ease-out 0.2s both;
+}
+.photo-container { position: relative; width: clamp(360px, 40vw, 540px); aspect-ratio: 1/1; }
+
+.photo-frame {
+    width: 55%; height: 55%;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+.photo-frame::before {
+    content: ''; position: absolute; inset: -10px; border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--accent), var(--accent-light), transparent 60%, var(--accent));
+    animation: spinRing 5s linear infinite; z-index: 0;
+}
+@keyframes spinRing { to { transform: rotate(360deg); } }
+
+.profile-photo {
+    position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+    border: 5px solid #050505;
+    box-shadow: 0 30px 60px -15px rgba(18, 63, 174, 0.55), 0 0 0 6px rgba(18, 63, 174, 0.15);
+    transition: box-shadow 0.4s ease;
+}
+.photo-frame:hover .profile-photo {
+    box-shadow: 0 40px 75px -15px rgba(18, 63, 174, 0.8), 0 0 0 6px rgba(61, 125, 255, 0.25);
+}
+
+.tech-badge {
+    position: absolute; z-index: 10;
+    width: 68px; height: 68px; border-radius: 50%;
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.tech-badge:hover {
+    transform: scale(1.15) !important;
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.4);
+    box-shadow: 0 15px 50px rgba(61, 125, 255, 0.3);
+}
+
+.badge-react   { top: 2%;  left: 50%;  transform: translateX(-50%);  color: #61DAFB; animation: fN 6s ease-in-out infinite; }
+.badge-github  { top: 8%;  right: 6%;                                color: #FFFFFF; animation: fNE 7s ease-in-out infinite; }
+.badge-js      { top: 50%; right: 0;   transform: translateY(-50%);  color: #F7DF1E; animation: fE 8s ease-in-out infinite; }
+.badge-shopify { bottom: 8%; right: 6%;                              color: #96BF48; animation: fSE 6.5s ease-in-out infinite; }
+.badge-wp      { bottom: 2%; left: 50%; transform: translateX(-50%); color: #21759B; animation: fS 7.5s ease-in-out infinite; }
+.badge-css     { bottom: 8%; left: 6%;                               color: #1572B6; animation: fSW 8.5s ease-in-out infinite; }
+.badge-figma   { top: 50%; left: 0;    transform: translateY(-50%);  color: #A259FF; animation: fW 7s ease-in-out infinite; }
+.badge-html    { top: 8%;  left: 6%;                                 color: #E34F26; animation: fNW 6.8s ease-in-out infinite; }
+
+@keyframes fN  { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
+@keyframes fNE { 0%,100% { transform: translate(0,0); }                   50% { transform: translate(8px,-8px); } }
+@keyframes fE  { 0%,100% { transform: translateY(-50%) translateX(0); }   50% { transform: translateY(-50%) translateX(10px); } }
+@keyframes fSE { 0%,100% { transform: translate(0,0); }                   50% { transform: translate(8px,8px); } }
+@keyframes fS  { 0%,100% { transform: translateX(-50%) translateY(0); }   50% { transform: translateX(-50%) translateY(10px); } }
+@keyframes fSW { 0%,100% { transform: translate(0,0); }                   50% { transform: translate(-8px,8px); } }
+@keyframes fW  { 0%,100% { transform: translateY(-50%) translateX(0); }   50% { transform: translateY(-50%) translateX(-10px); } }
+@keyframes fNW { 0%,100% { transform: translate(0,0); }                   50% { transform: translate(-8px,-8px); } }
+
+.scroll-indicator {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 15;
+    animation: slideUp 0.8s ease-out 0.6s both;
+}
+.scroll-indicator span { font-size: 0.7rem; color: #8b95a5; letter-spacing: 2px; text-transform: uppercase; }
+.scroll-mouse { width: 24px; height: 40px; border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; position: relative; }
+.scroll-mouse::before {
+    content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 3px; height: 8px; background: var(--accent-light); border-radius: 3px;
+    animation: scrollDown 1.8s ease-in-out infinite;
+}
+@keyframes scrollDown { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, 14px); } }
+
+/* ---------- RESPONSIVE HERO ---------- */
+@media (max-width: 1024px) {
+    .hero-content { flex-direction: column; text-align: center; gap: 50px; }
+    .hero-text { order: 1; max-width: 100%; margin-bottom: 10px; }
+    .hero-text h1 { font-size: 44px; }
+    .hero-buttons { justify-content: center; }
+    .availability-inline { margin: 0 auto; }
+    .photo-wrapper { order: 2; width: 100%; }
+    .photo-container { width: clamp(320px, 60vw, 440px); }
+    .tech-badge { width: 56px; height: 56px; font-size: 24px; }
+    .scroll-indicator { display: none; }
+}
+@media (max-width: 768px) {
+    /* en móvil el hero crece libre: nada se corta */
+    .hero { padding: 90px 20px 40px; min-height: auto; align-items: flex-start; }
+    .hero-content { gap: 34px; }
+    .hero-text h1 { font-size: 30px; line-height: 1.2; }
+    .hero-text p { font-size: 14px; margin-bottom: 24px; }
+    .hero-buttons { gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .btn-primary, .btn-secondary { padding: 10px 20px; font-size: 13px; }
+    .availability-inline { padding: 5px 12px; }
+    .availability-inline .badge-text { font-size: 0.6rem; letter-spacing: 0.6px; }
+    .photo-container { width: min(78vw, 340px); }
+    .tech-badge { width: 44px; height: 44px; font-size: 20px; }
+}
+@media (min-width: 1600px) { .hero-text h1 { font-size: 66px; } }
     </style>
 </head>
 <body>
@@ -772,14 +984,59 @@
         </nav>
     </header>
 
-    <div id="inicio" class="carousel-container" style="overflow: hidden; height: 100vh; width: 100%;">
-        <iframe
-            src="heropro.html"
-            style="width: 100%; height: 100vh; border: none; overflow: hidden;"
-            scrolling="no"
-            frameborder="0"
-        ></iframe>
+ <!-- ===== HERO INTEGRADO (sin header propio) ===== -->
+<section class="hero" id="inicio">
+    <div class="hero-bg">
+        <div class="grid-floor"></div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="blob blob-5"></div>
     </div>
+    <canvas id="heroParticles"></canvas>
+
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Hola, soy<br><span class="rotator-wrapper"><span class="rotator-word" id="rotatorWord">Adrián</span></span></h1>
+            <p>Frontend developer con +5 años de experiencia creando experiencias digitales inmersivas. Domino HTML, CSS, JavaScript, React, WordPress, Shopify, Figma y Photoshop para transformar ideas en productos digitales de alto impacto.</p>
+
+            <div class="hero-buttons">
+                <button class="btn-primary"><i class="fas fa-palette"></i> Ver Diseño</button>
+                <button class="btn-secondary"><i class="fas fa-globe"></i> Explorar Webs</button>
+            </div>
+
+            <div class="availability-inline">
+                <span class="status-dot"></span>
+                <span class="badge-text">Disponible para nuevos proyectos</span>
+            </div>
+        </div>
+
+        <div class="photo-wrapper">
+            <div class="photo-container">
+                <div class="tech-badge badge-react" title="React"><i class="fab fa-react"></i></div>
+                <div class="tech-badge badge-github" title="GitHub"><i class="fab fa-github"></i></div>
+                <div class="tech-badge badge-js" title="JavaScript"><i class="fab fa-js"></i></div>
+                <div class="tech-badge badge-shopify" title="Shopify"><i class="fab fa-shopify"></i></div>
+                <div class="tech-badge badge-wp" title="WordPress"><i class="fab fa-wordpress-simple"></i></div>
+                <div class="tech-badge badge-css" title="CSS3"><i class="fab fa-css3-alt"></i></div>
+                <div class="tech-badge badge-figma" title="Figma"><i class="fab fa-figma"></i></div>
+                <div class="tech-badge badge-html" title="HTML5"><i class="fab fa-html5"></i></div>
+
+                <div class="photo-frame">
+                    <!-- OJO: ajusta la ruta si pai.png no está junto a index.html -->
+                    <img class="profile-photo" src="pai.png" alt="Adrián González" loading="eager" decoding="async"
+                         onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-mouse"></div>
+    </div>
+</section>
 
     <div id="equip" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
         <iframe src="team.html" title="Sección Equipo" loading="lazy" style="width: 100%; height: 850px; border: none; display: block; overflow: hidden; margin: 0; padding: 0;" scrolling="no" frameborder="0"></iframe>
