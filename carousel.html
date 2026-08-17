@@ -336,27 +336,6 @@ body {
   object-fit: contain;
   display: block;
 }
-.glr-image-info-overlay {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: linear-gradient(to top, rgba(5, 10, 16, 0.92) 0%, rgba(5, 10, 16, 0.55) 50%, transparent 100%);
-  padding: 2rem 2rem 1.2rem 2rem;
-}
-.glr-overlay-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--white);
-  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
-}
-.glr-overlay-title i {
-  color: var(--accent-light);
-  font-size: 1.2rem;
-  filter: drop-shadow(0 0 8px var(--accent-glow));
-}
 .glr-lb-nav-btn {
   position: absolute;
   top: 50%;
@@ -535,8 +514,6 @@ body {
     .glr-lb-counter { bottom: 10px; right: 10px; font-size: 0.75rem; padding: 0.4rem 1rem; }
     .glr-image-overlay-container { max-width: 96vw; max-height: 80vh; }
     .glr-lightbox-img { max-width: 96vw; max-height: 80vh; }
-    .glr-image-info-overlay { padding: 1.2rem 1.2rem 0.8rem 1.2rem; }
-    .glr-overlay-title { font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
@@ -605,17 +582,11 @@ body {
     </div>
 </div>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX (Sin títulos ni nombres, solo la imagen) -->
 <div id="glrLightbox" class="glr-lightbox">
     <div class="glr-lightbox-container">
         <div class="glr-image-overlay-container">
             <img id="glrLightboxImg" class="glr-lightbox-img" alt="Vista ampliada">
-            <div class="glr-image-info-overlay">
-                <div class="glr-overlay-title">
-                    <i class="fa-solid fa-palette"></i>
-                    <span id="glrOverlayTitle">Obra</span>
-                </div>
-            </div>
         </div>
         <button id="glrCloseLbBtn" class="glr-lb-close"><i class="fas fa-times"></i></button>
         <button id="glrPrevLbBtn" class="glr-lb-nav-btn glr-lb-prev"><i class="fas fa-chevron-left"></i></button>
@@ -627,7 +598,7 @@ body {
 <script>
 (function() {
     const AUTO_SCROLL_ENABLED = true;
-    const AUTO_SCROLL_PAUSE_ON_HOVER = false; /* ✅ ya no se pausa al pasar el mouse: rueda siempre */
+    const AUTO_SCROLL_PAUSE_ON_HOVER = false;
     const CONTINUOUS_SCROLL_SPEED = 0.95;
 
     const obras = [
@@ -712,7 +683,6 @@ body {
                     <div style="text-align: center;">
                         <div style="font-size: 3rem; margin-bottom: 10px;">🎨</div>
                         <div>Foto ${(index % obras.length) + 1}</div>
-                        <div style="font-size: 0.9rem; margin-top: 5px;">${obra.titulo}</div>
                     </div>
                 `;
                 wrapper.appendChild(placeholder);
@@ -743,7 +713,7 @@ body {
 
     function updateLightboxContent() {
         lbImg.src = imagePaths[lbIndex];
-        document.getElementById('glrOverlayTitle').textContent = obras[lbIndex].titulo;
+        // Se eliminó la asignación del título para que no aparezca ningún nombre
         document.getElementById('glrLbCounter').textContent = `${lbIndex + 1} / ${obras.length}`;
     }
 
@@ -762,7 +732,6 @@ body {
         lightboxEl.classList.remove('glr-active-lb');
         isLightboxOpen = false;
         document.body.style.overflow = '';
-        /* ✅ reanuda el rodado al cerrar */
         setTimeout(() => {
             if (!isMobile && isInitialized) forceStartAutoScroll();
         }, 250);
@@ -1051,7 +1020,6 @@ body {
         startContinuousScroll();
     }
 
-    /* ✅ WATCHDOG: garantiza que el carrusel NUNCA quede detenido */
     setInterval(() => {
         if (AUTO_SCROLL_ENABLED && !isMobile && isInitialized &&
             !isUserInteracting && !isSnapping && !isLightboxOpen && !continuousScrollId) {
@@ -1059,7 +1027,6 @@ body {
         }
     }, 800);
 
-    /* Swipe galería móvil */
     let touchStartX = 0;
     let touchStartY = 0;
     let isSwiping = false;
