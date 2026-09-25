@@ -993,7 +993,7 @@
         </nav>
     </header>
 
- <!-- ===== HERO INTEGRADO (sin header propio) ===== -->
+<!-- ===== HERO INTEGRADO (con animaciones typewriter) ===== -->
 <section class="hero" id="inicio">
     <div class="hero-bg">
         <div class="grid-floor"></div>
@@ -1007,7 +1007,13 @@
 
     <div class="hero-content">
         <div class="hero-text">
-            <h1>Hola, soy<br><span class="rotator-wrapper"><span class="rotator-word" id="rotatorWord">Adrián</span></span></h1>
+            <h1>
+                Hola, soy<br>
+                <span class="rotator-wrapper">
+                    <span class="rotator-word" id="rotatorWord"></span>
+                    <span class="cursor">|</span>
+                </span>
+            </h1>
             <p>Frontend developer con +5 años de experiencia creando experiencias digitales inmersivas. Domino HTML, CSS, JavaScript, React, WordPress, Shopify, Figma y Photoshop para transformar ideas en productos digitales de alto impacto.</p>
 
             <div class="hero-buttons">
@@ -1033,7 +1039,6 @@
                 <div class="tech-badge badge-html" title="HTML5"><i class="fab fa-html5"></i></div>
 
                 <div class="photo-frame">
-                    <!-- OJO: ajusta la ruta si pai.png no está junto a index.html -->
                     <img class="profile-photo" src="pai.png" alt="Adrián González" loading="eager" decoding="async"
                          onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face'">
                 </div>
@@ -1047,288 +1052,219 @@
     </div>
 </section>
 
-    <div id="equip" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
-        <iframe src="team.html" title="Sección Equipo" loading="lazy" style="width: 100%; height: 850px; border: none; display: block; overflow: hidden; margin: 0; padding: 0;" scrolling="no" frameborder="0"></iframe>
-    </div>
+<div id="equip" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
+    <iframe src="team.html" title="Sección Equipo" loading="lazy" style="width: 100%; height: 850px; border: none; display: block; overflow: hidden; margin: 0; padding: 0;" scrolling="no" frameborder="0"></iframe>
+</div>
 
-    <div id="webs" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
-        <iframe src="carrusel2.html" title="Carrusel Páginas Web" loading="lazy" style="width: 100%; height: 680px; border: none; display: block; overflow: hidden; margin: 0; padding: 0; background: transparent;" scrolling="no" frameborder="0"></iframe>
-    </div>
+<div id="webs" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
+    <iframe src="carrusel2.html" title="Carrusel Páginas Web" loading="lazy" style="width: 100%; height: 680px; border: none; display: block; overflow: hidden; margin: 0; padding: 0; background: transparent;" scrolling="no" frameborder="0"></iframe>
+</div>
 
-    <div id="carro" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
-        <iframe src="carousel.html" title="Carrusel Diseño Gráfico" loading="lazy" style="width: 100%; height: 680px; border: none; display: block; overflow: hidden; margin: 0; padding: 0; background: transparent;" scrolling="no" frameborder="0"></iframe>
-    </div>
+<div id="carro" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
+    <iframe src="carousel.html" title="Carrusel Diseño Gráfico" loading="lazy" style="width: 100%; height: 680px; border: none; display: block; overflow: hidden; margin: 0; padding: 0; background: transparent;" scrolling="no" frameborder="0"></iframe>
+</div>
 
-    <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
-  <title>Render Fotorealista | Studio Visual</title>
+<style>
+/* ===== ANIMACIONES TYPEWRITER Y ROTATOR ===== */
+.rotator-wrapper {
+  display: inline-block;
+  position: relative;
+  color: #3D7DFF;
+  font-weight: 700;
+}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+.rotator-word {
+  display: inline-block;
+  min-width: 240px; /* Evita que el texto "salte" al cambiar de longitud */
+  text-align: left;
+}
 
-  <style>
-    *{ margin:0; padding:0; box-sizing:border-box; }
+.cursor {
+  display: inline-block;
+  width: 3px;
+  color: #3D7DFF;
+  animation: blink 0.7s infinite;
+  font-weight: 300;
+  margin-left: 2px;
+}
 
-    :root{
-      --primary: #050a10;
-      --secondary: #0d1f33;
-      --accent: #123FAE;
-      --accent-light: #3D7DFF;
-      --accent-soft: #80A5FF;
-      --accent-glow: rgba(18, 63, 174, 0.4);
-      --text: #e0e6ed;
-      --text-muted: #8b95a5;
-      --white: #ffffff;
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Animaciones de entrada */
+.hero-text h1 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.hero-text p {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 0.6s;
+}
+
+.hero-buttons {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 0.9s;
+}
+
+.availability-inline {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.2s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Partículas */
+#heroParticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+</style>
+
+<script>
+// ===== EFECTO TYPEWRITER CON ROTACIÓN DE PALABRAS =====
+document.addEventListener('DOMContentLoaded', () => {
+  const rotatorWord = document.getElementById('rotatorWord');
+  
+  // Secuencia de palabras actualizada
+  const words = [
+    'Adrián González',
+    'Web Developer',
+    'Graphic Designer',
+    'UX/UI Designer'
+  ];
+  
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typingSpeed = 100;
+  
+  function typeWriter() {
+    const currentWord = words[wordIndex];
+    
+    if (isDeleting) {
+      // Eliminando caracteres
+      rotatorWord.textContent = currentWord.substring(0, charIndex - 1);
+      charIndex--;
+      typingSpeed = 50; // Más rápido al borrar
+    } else {
+      // Escribiendo caracteres
+      rotatorWord.textContent = currentWord.substring(0, charIndex + 1);
+      charIndex++;
+      typingSpeed = 100; // Velocidad normal de escritura
     }
+    
+    // Si completó la palabra
+    if (!isDeleting && charIndex === currentWord.length) {
+      isDeleting = true;
+      typingSpeed = 2000; // Pausa antes de borrar (2 segundos)
+    } 
+    // Si terminó de borrar
+    else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length; // Siguiente palabra
+      typingSpeed = 500; // Pausa antes de escribir nueva palabra
+    }
+    
+    setTimeout(typeWriter, typingSpeed);
+  }
+  
+  // Iniciar animación después de 1 segundo
+  setTimeout(typeWriter, 1000);
+  
+  // ===== SISTEMA DE PARTÍCULAS =====
+  const canvas = document.getElementById('heroParticles');
+  if (canvas) {
+    initParticles();
+  }
+});
 
-    body{
-      font-family:'Poppins',sans-serif;
-      background:#0a0e17;
-      min-height: 100vh;
-      overflow-x: hidden;
-      overflow-y: auto;
+// ===== SISTEMA DE PARTÍCULAS =====
+function initParticles() {
+  const canvas = document.getElementById('heroParticles');
+  const ctx = canvas.getContext('2d');
+  
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  const particles = [];
+  const particleCount = 80;
+  
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedX = Math.random() * 0.5 - 0.25;
+      this.speedY = Math.random() * 0.5 - 0.25;
+      this.color = `rgba(61, 125, 255, ${Math.random() * 0.4 + 0.1})`;
     }
-
-    /* ===== SECCIÓN RENDER (nombre único para NO pelear con el .hero del portafolio) ===== */
-    .render-hero{
-      width:100%;
-      min-height: 100vh;
-      position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 6rem 9% 5rem;
-      overflow: visible; /* ✅ ANTES era hidden y recortaba las imágenes */
-      background:
-        radial-gradient(circle at 30% 20%,
-        rgba(61,125,255,.30) 0%,
-        rgba(18,63,174,.22) 40%,
-        rgba(5,10,16,1) 80%);
-      z-index: 1;
+    
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      
+      if (this.x > canvas.width) this.x = 0;
+      if (this.x < 0) this.x = canvas.width;
+      if (this.y > canvas.height) this.y = 0;
+      if (this.y < 0) this.y = canvas.height;
     }
-
-    .render-hero::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background-image:
-        linear-gradient(rgba(61,125,255,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(61,125,255,.06) 1px, transparent 1px);
-      background-size:36px 36px;
-      mask-image: radial-gradient(circle at center, black 25%, transparent 85%);
-      opacity:.5;
-      pointer-events: none;
+    
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
     }
-
-    /* ===== WRAPPER DIV ===== */
-    .render-wrapper{
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 4rem;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 2;
+  }
+  
+  function init() {
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
     }
-
-    /* ===== CARD ===== */
-    .card{
-      position:relative;
-      z-index:2;
-      width: 100%;
-      max-width: 360px;
-      padding: 32px 28px;
-      border-radius: 32px;
-      background: rgba(13,31,51,0.75);
-      backdrop-filter: blur(2px);
-      border:1px solid rgba(18,63,174,.45);
-      box-shadow:
-        0 30px 50px -20px rgba(0,0,0,0.9),
-        0 0 0 1px rgba(255,255,255,.02) inset,
-        0 0 35px rgba(18,63,174,.25);
-      text-align:center;
-      transition: transform 0.3s ease;
-    }
-    .card:hover { transform: translateY(-5px); border-color: rgba(61,125,255,.6); }
-
-    .icon-wrap{
-      width:70px; height:70px; margin:0 auto 16px; border-radius: 24px;
-      display:flex; align-items:center; justify-content:center;
-      border:2px solid rgba(61,125,255,.35);
-      box-shadow: 0 0 18px rgba(61,125,255,.25);
-      background: linear-gradient(135deg, var(--secondary), var(--primary));
-    }
-
-    .cube{
-      width:32px; height:32px; border:4px solid #fff; border-radius:10px;
-      transform:rotate(45deg); position:relative;
-      box-shadow: 0 0 8px rgba(61,125,255,0.6);
-    }
-    .cube::after{
-      content:""; position:absolute; width:14px; height:14px; background:#fff;
-      right:-6px; top:8px; border-radius: 2px;
-      box-shadow: 0 0 5px var(--accent-light);
-    }
-
-    .card h1{
-      font-size:1.8rem; line-height:1.2; margin-bottom:12px; font-weight:700; letter-spacing:-0.5px;
-      background: linear-gradient(135deg, #ffffff, var(--accent-soft));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-
-    .card p{
-      color:var(--text); font-size:0.85rem; line-height:1.45; font-weight:400;
-      margin-bottom:20px; opacity:0.9;
-    }
-
-    .blender{
-      width:58px; margin-bottom:18px;
-      filter:drop-shadow(0 0 12px rgba(255,170,0,.4));
-      transition: filter 0.3s;
-    }
-    .blender:hover { filter:drop-shadow(0 0 18px rgba(255,170,0,.7)); }
-
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:170px; height:48px; border-radius:60px; text-decoration:none;
-      color:#fff; font-weight:600; letter-spacing:1px; font-size:0.9rem;
-      border:2px solid rgba(61,125,255,.5);
-      background: linear-gradient(135deg, rgba(18,63,174,.25), rgba(18,63,174,.05));
-      box-shadow: inset 0 0 12px rgba(61,125,255,.12), 0 0 18px rgba(61,125,255,.12);
-      transition: all 0.3s ease; backdrop-filter: blur(4px); cursor: pointer;
-    }
-    .btn:hover{
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(61,125,255,.35);
-      border-color: var(--accent-light);
-      background: linear-gradient(135deg, rgba(61,125,255,.3), rgba(61,125,255,.08));
-    }
-
-    /* ===== CARRUSEL ===== */
-    .soda-area{
-      position:relative; z-index:2; width:auto; flex:1; min-width:280px;
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-    }
-
-    .carousel-container {
-      position: relative; width: 100%;
-      display: flex; justify-content: center; align-items: center;
-      padding: 25px 0 55px; /* ✅ espacio para la flotación y la sombra: nada se corta */
-    }
-
-    /* ✅ Track RESPONSIVE con min(): nunca se sale de la pantalla */
-    .carousel-track {
-      position: relative;
-      width: min(500px, 88vw);
-      height: min(500px, 88vw);
-      display: flex; justify-content: center; align-items: center;
-    }
-
-    .carousel-item {
-      position: absolute; width: 100%; opacity: 0;
-      transform: rotate(-12deg) scale(0.85) translateY(35px);
-      transition: opacity 0.55s cubic-bezier(0.2, 0.9, 0.4, 1.1),
-                  transform 0.55s cubic-bezier(0.2, 0.85, 0.3, 1);
-      filter: drop-shadow(0 40px 35px rgba(0,0,0,.9)) drop-shadow(0 0 25px rgba(61,125,255,.25));
-      pointer-events: none; will-change: transform, opacity;
-    }
-
-    .carousel-item.active {
-      opacity: 1;
-      transform: rotate(-8deg) scale(1) translateY(0px);
-      z-index: 20;
-    }
-
-    /* ✅ object-fit: contain = la imagen SIEMPRE entra completa, sin recortes */
-    .carousel-item img {
-      width: 100%;
-      max-width: 480px;
-      height: auto;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto;
-      animation: floatItem 4.5s ease-in-out infinite;
-      border-radius: 20px;
-    }
-
-    @keyframes floatItem {
-      0%,100% { transform: translateY(0px); }
-      50%     { transform: translateY(-16px); }
-    }
-
-    .dynamic-shadow {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 380px; height: 40px;
-      background: radial-gradient(ellipse, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 45%, transparent 85%);
-      filter: blur(14px); border-radius: 50%;
-      pointer-events: none; z-index: 1;
-      transition: width 0.4s cubic-bezier(0.2, 0.9, 0.4, 1), opacity 0.3s ease;
-    }
-
-    /* INDICADORES */
-    .carousel-indicators {
-      display: flex; gap: 20px; justify-content: center; align-items: center; z-index: 25;
-      background: rgba(5, 10, 16, 0.45); backdrop-filter: blur(12px);
-      padding: 8px 24px; border-radius: 60px;
-      border: 1px solid rgba(18, 63, 174, 0.55);
-      width: fit-content; margin: 0 auto;
-    }
-
-    .indicator {
-      width: 12px; height: 12px; border-radius: 30px;
-      background: rgba(255, 255, 255, 0.5); cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.4, 1);
-    }
-    .indicator.active {
-      background: var(--accent-light); width: 32px; border-radius: 20px;
-      box-shadow: 0 0 14px var(--accent-light);
-    }
-    .indicator:hover { background: var(--accent-soft); transform: scale(1.2); }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1000px) {
-      .render-hero { min-height: auto; padding: 4.5rem 1.5rem 4rem; }
-      .render-wrapper { flex-direction: column; gap: 3rem; }
-      .card { max-width: 380px; margin: 0 auto; }
-      .soda-area { width: 100%; }
-      .carousel-track { width: min(380px, 88vw); height: min(380px, 88vw); }
-      .carousel-item img { max-width: 100%; }
-      .dynamic-shadow { width: min(280px, 70vw); height: 32px; }
-      .carousel-indicators { padding: 6px 20px; gap: 16px; }
-    }
-
-    @media (max-width: 680px) {
-      .render-hero { padding: 4rem 1.2rem 3.5rem; }
-      .card { padding: 22px 18px; max-width: 100%; border-radius: 28px; }
-      .card h1 { font-size: 1.6rem; }
-      .card p { font-size: 0.8rem; margin-bottom: 16px; }
-      .icon-wrap { width: 60px; height: 60px; margin-bottom: 12px; }
-      .cube { width: 28px; height: 28px; border-width: 3px; }
-      .cube::after { width: 10px; height: 10px; right: -5px; top: 6px; }
-      .blender { width: 48px; margin-bottom: 14px; }
-      .btn { width: 150px; height: 44px; font-size: 0.8rem; }
-      .carousel-track { width: min(320px, 86vw); height: min(320px, 86vw); }
-      .dynamic-shadow { width: min(230px, 68vw); height: 26px; filter: blur(12px); }
-      .carousel-indicators { gap: 12px; padding: 5px 18px; }
-      .indicator { width: 8px; height: 8px; }
-      .indicator.active { width: 28px; }
-    }
-
-    @media (max-width: 480px) {
-      .render-hero { padding: 3.5rem 1rem 3rem; }
-      .card { padding: 18px 16px; }
-      .card h1 { font-size: 1.45rem; }
-      .carousel-track { width: min(280px, 84vw); height: min(280px, 84vw); }
-      .dynamic-shadow { width: min(190px, 64vw); height: 22px; filter: blur(10px); }
-      .carousel-indicators { padding: 4px 14px; gap: 10px; }
-    }
-  </style>
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(particle => {
+      particle.update();
+      particle.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+  
+  init();
+  animate();
+  
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+}
+</script>
 </head>
 
 <body>
