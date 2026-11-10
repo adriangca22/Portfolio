@@ -1109,7 +1109,22 @@
     <div id="carro" class="carousel-container" style="width: 100%; overflow: hidden; margin: 0; padding: 0;">
         <iframe src="carousel.html" title="Carrusel Diseño Gráfico" loading="lazy" style="width: 100%; height: 680px; border: none; display: block; overflow: hidden; margin: 0; padding: 0; background: transparent;" scrolling="no" frameborder="0"></iframe>
     </div>
+    <!-- Sección de Videos con separación -->
+    <div id="equip" class="carousel-container" style="margin: 3rem 0; width: 100%;">
+        <iframe src="videos.html" id="videoIframe" title="Sección Videos" loading="lazy" style="width: 100%; height: 850px; border: none; display: block; overflow: hidden; margin: 0; padding: 0; transition: height 0.3s ease;" scrolling="no" frameborder="0"></iframe>
+    </div>
 
+    <!-- Script para que la altura del iframe se adapte sola -->
+    <script>
+      window.addEventListener('message', function(event) {
+        if (event.data && event.data.iframeHeight) {
+          var iframe = document.getElementById('videoIframe');
+          if (iframe) {
+            iframe.style.height = event.data.iframeHeight + 'px';
+          }
+        }
+      });
+    </script>
     <!-- ===== SECCIÓN "MÁS ALLÁ DE LO REAL" (3D) ===== -->
     <section class="destacate-section" id="destacate">
         <video class="destacate-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
