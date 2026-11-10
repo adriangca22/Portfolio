@@ -20,7 +20,6 @@
       --text: #e0e6ed;
       --text-muted: #8b95a5;
     }
-    /* ✅ Ajustado para que sea transparente y sin márgenes dentro del iframe */
     html, body {
       width: 100%;
       min-height: 100%;
@@ -489,84 +488,194 @@
       letter-spacing: 0.3px;
     }
 
+    /* ============================================================
+       MODAL: zona visible + navegación lateral
+       (top / height / --modal-h los calcula el JS)
+       ============================================================ */
     .video-modal {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100vh;
+      --modal-h: 100vh;
+      --modal-pad: clamp(0.75rem, 3vw, 2.5rem);
       z-index: 9999;
       background: radial-gradient(ellipse at center, rgba(10, 14, 23, 0.97) 0%, rgba(0, 0, 0, 0.99) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: clamp(1rem, 4vw, 3rem);
+      padding: var(--modal-pad);
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease, visibility 0.3s ease;
       overscroll-behavior: contain;
+      overflow: hidden;
+      touch-action: pan-y;
     }
     .video-modal.open { opacity: 1; visibility: visible; }
 
     .modal-content {
       position: relative;
       width: 100%;
-      max-width: min(1200px, 92vw);
-      max-height: 100%;
+      height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 0.9rem;
       transform: scale(0.92);
       transition: transform 0.35s cubic-bezier(.2, .8, .3, 1);
     }
     .video-modal.open .modal-content { transform: scale(1); }
 
-    .modal-content video {
+    /* Contenedor de tamaño fijo: el video ya no se ve chiquito mientras carga */
+    .modal-stage {
+      width: min(1200px, calc(100% - 120px));
+      height: calc(var(--modal-h) - (var(--modal-pad) * 2) - 4.5rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.28s cubic-bezier(.2, .8, .3, 1), opacity 0.28s ease;
+      will-change: transform, opacity;
+    }
+    .modal-stage.is-leaving { opacity: 0; }
+
+    .modal-stage video {
+      display: block;
       width: 100%;
-      height: auto;
-      max-height: 88vh;
+      height: 100%;
+      object-fit: contain;
       border-radius: 14px;
       background: #000;
       box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.85),
         0 0 0 1px rgba(255, 255, 255, 0.08);
       outline: none;
-      display: block;
     }
-    .video-modal[data-theme="info"] .modal-content video {
+    .video-modal[data-theme="info"] .modal-stage video {
       box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.85),
         0 0 0 1px rgba(255, 255, 255, 0.08),
         0 0 50px -5px rgba(61, 125, 255, 0.45);
     }
-    .video-modal[data-theme="ai"] .modal-content video {
+    .video-modal[data-theme="ai"] .modal-stage video {
       box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.85),
         0 0 0 1px rgba(255, 255, 255, 0.08),
         0 0 50px -5px rgba(167, 139, 250, 0.45);
     }
 
+    .modal-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      max-width: min(1200px, calc(100% - 120px));
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      text-align: center;
+    }
+    .modal-counter {
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .modal-title {
+      font-size: clamp(0.8rem, 2.6vw, 1rem);
+      font-weight: 600;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Flechas laterales del modal */
+    .modal-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      padding: 0;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .modal-arrow.prev { left: clamp(10px, 2vw, 24px); }
+    .modal-arrow.next { right: clamp(10px, 2vw, 24px); }
+    .modal-arrow:hover {
+      background: rgba(255, 255, 255, 0.24);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-50%) scale(1.08);
+    }
+    .modal-arrow:active { transform: translateY(-50%) scale(0.95); }
+    .modal-arrow svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Pantalla completa real */
+    .video-modal:fullscreen,
+    .video-modal:-webkit-full-screen {
+      top: 0 !important;
+      height: 100% !important;
+      --modal-h: 100vh;
+      --modal-pad: 0.5rem;
+    }
+    .video-modal:fullscreen .modal-stage,
+    .video-modal:-webkit-full-screen .modal-stage {
+      width: calc(100% - 130px);
+    }
+    .video-modal:fullscreen .modal-stage video,
+    .video-modal:-webkit-full-screen .modal-stage video {
+      border-radius: 0;
+    }
+
     .modal-close,
     .modal-fs {
       position: absolute;
-      top: clamp(12px, 2.5vw, 24px);
-      width: 48px;
-      height: 48px;
+      top: clamp(10px, 2vw, 20px);
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
       color: #fff;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: background 0.2s ease, transform 0.25s ease, border-color 0.2s ease;
-      z-index: 3;
+      z-index: 6;
       padding: 0;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
-    .modal-close { right: clamp(12px, 2.5vw, 24px); }
-    .modal-fs    { right: calc(clamp(12px, 2.5vw, 24px) + 62px); }
+    .modal-close { right: clamp(10px, 2vw, 20px); }
+    .modal-fs    { right: calc(clamp(10px, 2vw, 20px) + 58px); }
     .modal-close:hover,
     .modal-fs:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.45);
     }
     .modal-close:hover { transform: rotate(90deg); }
     .modal-fs:hover    { transform: scale(1.1); }
@@ -589,9 +698,14 @@
       .carousel-with-nav { padding: 0 40px; }
       .carousel-nav { width: 38px; height: 38px; }
       .carousel-nav svg { width: 18px; height: 18px; }
-      .modal-close, .modal-fs { width: 42px; height: 42px; }
-      .modal-fs { right: calc(clamp(12px, 2.5vw, 24px) + 52px); }
+      .modal-close, .modal-fs { width: 40px; height: 40px; }
+      .modal-fs { right: calc(clamp(10px, 2vw, 20px) + 50px); }
       .modal-close svg, .modal-fs svg { width: 18px; height: 18px; }
+      .modal-arrow { width: 40px; height: 40px; background: rgba(0, 0, 0, 0.45); }
+      .modal-arrow svg { width: 20px; height: 20px; }
+      .modal-stage, .modal-info { width: 100%; max-width: 100%; }
+      .video-modal:fullscreen .modal-stage,
+      .video-modal:-webkit-full-screen .modal-stage { width: 100%; }
     }
     @media (max-width: 480px) {
       .video-card { flex: 0 0 260px; }
@@ -609,6 +723,7 @@
         animation: none !important;
       }
       .video-carousel { scroll-behavior: auto; }
+      .modal-stage { transition: none; }
     }
   </style>
 </head>
@@ -684,8 +799,22 @@
         <line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
+
+    <button class="modal-arrow prev" id="modalPrev" aria-label="Video anterior">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="modal-arrow next" id="modalNext" aria-label="Video siguiente">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
     <div class="modal-content">
-      <video id="modalVideo" controls playsinline webkit-playsinline preload="none"></video>
+      <div class="modal-stage" id="modalStage">
+        <video id="modalVideo" controls playsinline webkit-playsinline preload="none"></video>
+      </div>
+      <div class="modal-info">
+        <span class="modal-counter" id="modalCounter">1 / 1</span>
+        <span class="modal-title" id="modalTitle"></span>
+      </div>
     </div>
   </div>
 
@@ -734,41 +863,41 @@
     ];
 
     const aiVideos = [
-      { 
-        title: 'Generación Visual y Diseño con IA', 
-        sub: 'Inteligencia Artificial · Creatividad', 
-        src: 'https://file.garden/aicj-LWBZTmGA5zi/dlls_e9f295ef9af0401194571c70ca54cc6b.mp4', 
-        poster: '' 
+      {
+        title: 'Generación Visual y Diseño con IA',
+        sub: 'Inteligencia Artificial · Creatividad',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/dlls_e9f295ef9af0401194571c70ca54cc6b.mp4',
+        poster: ''
       },
-      { 
-        title: 'Si vas a construir tu casa en el campo, DEBES ver este diseño', 
-        sub: 'Arquitectura · IA Generativa', 
-        src: 'https://file.garden/aicj-LWBZTmGA5zi/Si_vas_a_construir_tu_casa_en_el_campo%2C_DEBES_ver_este_dise%C3%B1o_in.mp4', 
-        poster: '' 
+      {
+        title: 'Si vas a construir tu casa en el campo, DEBES ver este diseño',
+        sub: 'Arquitectura · IA Generativa',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Si_vas_a_construir_tu_casa_en_el_campo%2C_DEBES_ver_este_dise%C3%B1o_in.mp4',
+        poster: ''
       },
-      { 
-        title: 'QUÉ HACE LA CREATINA en tu cuerpo: La ciencia detrás de tus músculos', 
-        sub: 'Salud · Ciencia', 
-        src: 'https://file.garden/aicj-LWBZTmGA5zi/QU%C3%89_HACE_LA_CREATINA_en_tu_cuerpo_La_ciencia_detr%C3%A1s_de_tus_m%C3%BAs.mp4', 
-        poster: '' 
+      {
+        title: 'QUÉ HACE LA CREATINA en tu cuerpo: La ciencia detrás de tus músculos',
+        sub: 'Salud · Ciencia',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/QU%C3%89_HACE_LA_CREATINA_en_tu_cuerpo_La_ciencia_detr%C3%A1s_de_tus_m%C3%BAs.mp4',
+        poster: ''
       },
-      { 
-        title: 'Qué pasa realmente cuando tomas un antibiótico', 
-        sub: 'Medicina · Cuerpo Humano', 
-        src: 'https://file.garden/aicj-LWBZTmGA5zi/Que_pasa_realmente_cuando_tomas_un_antibiotico_%23cuerpohumano_%23.mp4', 
-        poster: '' 
+      {
+        title: 'Qué pasa realmente cuando tomas un antibiótico',
+        sub: 'Medicina · Cuerpo Humano',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Que_pasa_realmente_cuando_tomas_un_antibiotico_%23cuerpohumano_%23.mp4',
+        poster: ''
       },
-      { 
-        title: 'El refresco de vidrio sí sabe más rico, y no es nostalgia', 
-        sub: 'Ciencia · Curiosidades', 
-        src: 'https://file.garden/aicj-LWBZTmGA5zi/El_refresco_de_vidrio_s%C3%AD_sabe_m%C3%A1s_rico%2C_y_no_es_nostalgia_es_la.mp4', 
-        poster: '' 
+      {
+        title: 'El refresco de vidrio sí sabe más rico, y no es nostalgia',
+        sub: 'Ciencia · Curiosidades',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/El_refresco_de_vidrio_s%C3%AD_sabe_m%C3%A1s_rico%2C_y_no_es_nostalgia_es_la.mp4',
+        poster: ''
       },
-      { 
-        title: 'How the First Combat Submarine Actually Worked', 
-        sub: 'Historia · Ingeniería', 
-        src: 'https://file.garden/aicj-LWBZTmGA5zi/How_the_First_Combat_Submarine_Actually_Worked_%23engineering_%23his.mp4', 
-        poster: '' 
+      {
+        title: 'How the First Combat Submarine Actually Worked',
+        sub: 'Historia · Ingeniería',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/How_the_First_Combat_Submarine_Actually_Worked_%23engineering_%23his.mp4',
+        poster: ''
       }
     ];
 
@@ -784,6 +913,7 @@
       card.className = 'video-card';
       card.dataset.type = type;
       card.dataset.src = video.src;
+      card.dataset.index = index;
       if (video.previewTime) card.dataset.previewTime = video.previewTime;
 
       const num = String(index + 1).padStart(2, '0');
@@ -914,15 +1044,165 @@
     });
 
     /* ============================================================
-       MODAL
+       MODAL: zona visible + pantalla completa + navegación
        ============================================================ */
+    const playlists = { info: informativeVideos, ai: aiVideos };
+
     const modal = document.getElementById('videoModal');
     const modalVideo = document.getElementById('modalVideo');
+    const modalStage = document.getElementById('modalStage');
     const modalClose = document.getElementById('modalClose');
     const modalFs = document.getElementById('modalFs');
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+    const modalCounter = document.getElementById('modalCounter');
+    const modalTitle = document.getElementById('modalTitle');
     let lastFocused = null;
+    let parentWin = null;
+    let parentPrevOverflow = '';
+    let currentType = 'info';
+    let currentIndex = 0;
+    let navLock = false;
 
-    function openModal(src, theme) {
+    /* Obtiene la parte del iframe que el usuario realmente ve.
+       Si no está en un iframe (o es de otro origen), usa toda la ventana. */
+    function getVisibleBox() {
+      try {
+        const fe = window.frameElement;
+        if (fe && window.parent && window.parent !== window) {
+          const r = fe.getBoundingClientRect();
+          const ph = window.parent.innerHeight;
+          const top = Math.max(0, -r.top);
+          const bottom = Math.min(r.height, ph - r.top);
+          const height = bottom - top;
+          if (height > 120) return { top: top, height: height };
+        }
+      } catch (e) { /* iframe de otro origen */ }
+      return { top: 0, height: window.innerHeight };
+    }
+
+    function isModalFullscreen() {
+      const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+      return fsEl === modal;
+    }
+
+    function layoutModal() {
+      if (!modal.classList.contains('open')) return;
+      if (isModalFullscreen()) {
+        modal.style.top = '0px';
+        modal.style.height = '100%';
+        modal.style.setProperty('--modal-h', '100vh');
+        return;
+      }
+      const box = getVisibleBox();
+      modal.style.top = box.top + 'px';
+      modal.style.height = box.height + 'px';
+      modal.style.setProperty('--modal-h', box.height + 'px');
+    }
+
+    function bindParentListeners() {
+      try {
+        if (window.parent && window.parent !== window) {
+          parentWin = window.parent;
+          parentWin.addEventListener('scroll', layoutModal, { passive: true });
+          parentWin.addEventListener('resize', layoutModal);
+          parentPrevOverflow = parentWin.document.body.style.overflow;
+          parentWin.document.body.style.overflow = 'hidden';
+        }
+      } catch (e) { parentWin = null; }
+    }
+
+    function unbindParentListeners() {
+      try {
+        if (parentWin) {
+          parentWin.removeEventListener('scroll', layoutModal);
+          parentWin.removeEventListener('resize', layoutModal);
+          parentWin.document.body.style.overflow = parentPrevOverflow;
+        }
+      } catch (e) {}
+      parentWin = null;
+    }
+
+    window.addEventListener('resize', layoutModal);
+    document.addEventListener('fullscreenchange', layoutModal);
+    document.addEventListener('webkitfullscreenchange', layoutModal);
+
+    function enterFullscreen() {
+      const req = modal.requestFullscreen || modal.webkitRequestFullscreen || modal.msRequestFullscreen;
+      if (req) {
+        try {
+          const p = req.call(modal);
+          if (p && p.catch) {
+            p.catch(() => {
+              // Fallback (iOS): pantalla completa nativa del video
+              if (modalVideo.webkitEnterFullscreen) {
+                try { modalVideo.webkitEnterFullscreen(); } catch (e) {}
+              }
+            });
+          }
+        } catch (e) {}
+      } else if (modalVideo.webkitEnterFullscreen) {
+        try { modalVideo.webkitEnterFullscreen(); } catch (e) {}
+      }
+    }
+
+    function exitFullscreen() {
+      const ex = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (ex) {
+        try {
+          const p = ex.call(document);
+          if (p && p.catch) p.catch(() => {});
+        } catch (e) {}
+      }
+    }
+
+    /* Carga un video en el modal. dir: 1 = siguiente, -1 = anterior, 0 = sin animación */
+    function showVideo(type, index, dir) {
+      const list = playlists[type];
+      if (!list || !list.length) return;
+
+      currentType = type;
+      currentIndex = (index + list.length) % list.length;
+      const video = list[currentIndex];
+
+      modal.dataset.theme = type;
+      modalCounter.textContent = (currentIndex + 1) + ' / ' + list.length;
+      modalTitle.textContent = video.title;
+
+      const hideArrows = list.length < 2;
+      modalPrev.style.display = hideArrows ? 'none' : '';
+      modalNext.style.display = hideArrows ? 'none' : '';
+
+      const swap = () => {
+        modalVideo.src = video.src;
+        modalVideo.load();
+        const p = modalVideo.play();
+        if (p && p.catch) p.catch(() => {});
+      };
+
+      if (!dir) { swap(); return; }
+
+      // Animación de salida → cambio → entrada desde el lado contrario
+      navLock = true;
+      modalStage.classList.add('is-leaving');
+      modalStage.style.transform = 'translateX(' + (-dir * 60) + 'px)';
+
+      setTimeout(() => {
+        swap();
+        modalStage.style.transition = 'none';
+        modalStage.style.transform = 'translateX(' + (dir * 60) + 'px)';
+        void modalStage.offsetWidth;
+        modalStage.style.transition = '';
+        modalStage.classList.remove('is-leaving');
+        modalStage.style.transform = 'translateX(0)';
+        setTimeout(() => { navLock = false; }, 280);
+      }, 220);
+    }
+
+    function goNext() { if (!navLock) showVideo(currentType, currentIndex + 1, 1); }
+    function goPrev() { if (!navLock) showVideo(currentType, currentIndex - 1, -1); }
+
+    function openModal(type, index) {
       lastFocused = document.activeElement;
 
       document.querySelectorAll('.video-card video').forEach(v => {
@@ -930,24 +1210,28 @@
       });
       document.querySelectorAll('.video-card.playing').forEach(c => c.classList.remove('playing'));
 
-      modal.dataset.theme = theme || 'info';
-      modalVideo.src = src;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
 
-      requestAnimationFrame(() => {
-        const p = modalVideo.play();
-        if (p && p.catch) p.catch(() => {});
-      });
+      bindParentListeners();
+      layoutModal();
+      showVideo(type, index, 0);
+
+      // Intenta abrir directamente en pantalla completa (requiere el gesto del click)
+      enterFullscreen();
+      requestAnimationFrame(layoutModal);
 
       setTimeout(() => modalClose.focus(), 100);
     }
 
     function closeModal() {
+      if (isModalFullscreen()) exitFullscreen();
+
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      unbindParentListeners();
 
       try { modalVideo.pause(); } catch (e) {}
       modalVideo.removeAttribute('src');
@@ -969,25 +1253,55 @@
     }
 
     modalClose.addEventListener('click', closeModal);
+    modalPrev.addEventListener('click', (e) => { e.stopPropagation(); goPrev(); });
+    modalNext.addEventListener('click', (e) => { e.stopPropagation(); goNext(); });
+
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
+      if (e.target === modal || e.target.classList.contains('modal-content')) closeModal();
     });
+
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape' && !isModalFullscreen()) closeModal();
+      else if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
+      else if (e.key === 'ArrowLeft')  { e.preventDefault(); goPrev(); }
     });
 
     modalFs.addEventListener('click', () => {
-      const v = modalVideo;
-      if (v.requestFullscreen) {
-        v.requestFullscreen().catch(() => {});
-      } else if (v.webkitEnterFullscreen) {
-        v.webkitEnterFullscreen();
-      } else if (v.webkitRequestFullscreen) {
-        v.webkitRequestFullscreen();
-      } else if (v.msRequestFullscreen) {
-        v.msRequestFullscreen();
-      }
+      if (isModalFullscreen()) exitFullscreen();
+      else enterFullscreen();
     });
+
+    /* ---------- Deslizar a los lados (touch) ---------- */
+    let swipe = null;
+
+    modal.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) { swipe = null; return; }
+      const t = e.touches[0];
+
+      // Si toca la barra de controles del video (parte baja), no hacemos swipe
+      const r = modalVideo.getBoundingClientRect();
+      const onControls = t.clientY > r.bottom - 64 && t.clientY < r.bottom &&
+                         t.clientX > r.left && t.clientX < r.right;
+      if (onControls) { swipe = null; return; }
+
+      swipe = { x: t.clientX, y: t.clientY, t: Date.now() };
+    }, { passive: true });
+
+    modal.addEventListener('touchend', (e) => {
+      if (!swipe) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - swipe.x;
+      const dy = t.clientY - swipe.y;
+      const dt = Date.now() - swipe.t;
+      swipe = null;
+
+      const horizontal = Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5;
+      if (!horizontal || dt > 700) return;
+
+      if (dx < 0) goNext();
+      else goPrev();
+    }, { passive: true });
 
     /* ============================================================
        INTERACCIÓN
@@ -1036,7 +1350,7 @@
       }
 
       card.addEventListener('click', () => {
-        openModal(card.dataset.src, card.dataset.type);
+        openModal(card.dataset.type, parseInt(card.dataset.index, 10) || 0);
       });
     });
 
@@ -1079,7 +1393,7 @@
       updateArrows();
     });
 
-    /* ✅ MAGIA: Envía la altura real al index.html para que el iframe se adapte y no se corte */
+    /* Envía la altura real al index.html para que el iframe se adapte */
     const resizeObserver = new ResizeObserver(() => {
       window.parent.postMessage({ iframeHeight: document.documentElement.scrollHeight }, '*');
     });
