@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="theme-color" content="#050a10">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://file.garden">
+  <link rel="preconnect" href="https://files.catbox.moe">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --primary: #050a10;
+      --secondary: #0d1f33;
+      --accent: #123FAE;
+      --accent-light: #3D7DFF;
+      --ai-accent: #A78BFA;
+      --text: #e0e6ed;
+      --text-muted: #8b95a5;
+    }
+    /* ✅ Ajustado para que sea transparente y sin márgenes dentro del iframe */
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Sora', system-ui, sans-serif;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    body { display: flex; flex-direction: column; }
+
+    .video-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 2.5rem 1.8rem;
+      background:
+        repeating-linear-gradient(45deg,
+          rgba(18, 63, 174, 0.05) 0px,
+          rgba(18, 63, 174, 0.05) 2px,
+          transparent 2px,
+          transparent 12px),
+        linear-gradient(145deg, #071424 0%, #0c1526 35%, #120d24 100%);
+      border-radius: 1.8rem;
+      border: 1px solid rgba(18, 63, 174, 0.45);
+      box-shadow: 0 25px 45px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      gap: 2.2rem;
+    }
+
+    .video-bg-fx {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: inherit;
+      z-index: 0;
+    }
+    .v-aurora {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .v-aurora-1 {
+      width: 520px; height: 520px;
+      top: -180px; right: -160px;
+      background: radial-gradient(circle,
+        rgba(61, 125, 255, 0.35) 0%,
+        rgba(61, 125, 255, 0.18) 30%,
+        rgba(61, 125, 255, 0.06) 55%,
+        transparent 75%);
+      animation: vAuroraDrift1 26s ease-in-out infinite alternate;
+    }
+    .v-aurora-2 {
+      width: 460px; height: 460px;
+      bottom: -160px; left: -140px;
+      background: radial-gradient(circle,
+        rgba(167, 139, 250, 0.28) 0%,
+        rgba(167, 139, 250, 0.14) 30%,
+        rgba(167, 139, 250, 0.05) 55%,
+        transparent 78%);
+      animation: vAuroraDrift2 30s ease-in-out infinite alternate;
+    }
+    @keyframes vAuroraDrift1 {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-70px, 60px, 0) scale(1.12); }
+    }
+    @keyframes vAuroraDrift2 {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(80px, -50px, 0) scale(1.1); }
+    }
+
+    .video-heading {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: vFadeUp .8s cubic-bezier(.2,.8,.3,1) both;
+    }
+    .video-heading h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.2rem, 7vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(90deg, #ffffff 0%, #ffffff 25%, #3D7DFF 50%, #A78BFA 75%, #ffffff 100%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px rgba(61, 125, 255, 0.35));
+      animation: vGradientTravel 8s linear infinite;
+      line-height: 1.3;
+    }
+    @keyframes vGradientTravel {
+      0%   { background-position: 100% 0; }
+      100% { background-position: -50% 0; }
+    }
+    @keyframes vFadeUp {
+      from { opacity: 0; transform: translateY(26px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .video-heading .sub {
+      font-size: clamp(0.8rem, 3.2vw, 1.05rem);
+      color: var(--text-muted);
+      margin-top: 0.8rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px dashed rgba(18, 63, 174, 0.5);
+      letter-spacing: 0.5px;
+    }
+
+    .video-carousel-wrapper {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      animation: vFadeUp .8s .15s cubic-bezier(.2,.8,.3,1) both;
+      --theme-accent: #3D7DFF;
+      --theme-accent-rgb: 61, 125, 255;
+    }
+    .video-carousel-wrapper[data-theme="ai"] {
+      --theme-accent: #A78BFA;
+      --theme-accent-rgb: 167, 139, 250;
+      animation-delay: .3s;
+    }
+
+    .carousel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0 0.3rem;
+    }
+    .carousel-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      background: rgba(var(--theme-accent-rgb), 0.15);
+      border: 1px solid rgba(var(--theme-accent-rgb), 0.35);
+      color: var(--theme-accent);
+      flex-shrink: 0;
+    }
+    .carousel-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .carousel-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(0.95rem, 3.5vw, 1.15rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--theme-accent);
+    }
+    .carousel-desc {
+      font-size: clamp(0.65rem, 2.5vw, 0.78rem);
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .carousel-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.6), transparent);
+    }
+
+    .carousel-with-nav {
+      position: relative;
+      padding: 0 clamp(48px, 6vw, 62px);
+    }
+
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(13, 31, 51, 0.92);
+      border: 1px solid rgba(var(--theme-accent-rgb), 0.45);
+      color: var(--theme-accent);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      padding: 0;
+      opacity: 0.85;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, opacity 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+    .carousel-nav svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.2s ease;
+    }
+    .carousel-nav.prev { left: 0; }
+    .carousel-nav.next { right: 0; }
+    .carousel-nav:hover:not(:disabled) {
+      opacity: 1;
+      background: rgba(var(--theme-accent-rgb), 0.35);
+      border-color: var(--theme-accent);
+      transform: translateY(-50%) scale(1.08);
+      box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.5),
+        0 0 22px rgba(var(--theme-accent-rgb), 0.55);
+    }
+    .carousel-nav.prev:hover:not(:disabled) svg { transform: translateX(-2px); }
+    .carousel-nav.next:hover:not(:disabled) svg { transform: translateX(2px); }
+    .carousel-nav:active:not(:disabled) { transform: translateY(-50%) scale(0.96); }
+    .carousel-nav:disabled {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-50%) scale(0.85);
+    }
+
+    .video-carousel {
+      position: relative;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    }
+    .video-carousel::-webkit-scrollbar { display: none; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .video-carousel { scroll-behavior: smooth; }
+    }
+    @media (hover: none), (max-width: 680px) {
+      .video-carousel {
+        scroll-snap-type: x mandatory;
+        mask-image: none;
+        -webkit-mask-image: none;
+      }
+    }
+
+    .video-track {
+      display: flex;
+      gap: 1.4rem;
+      width: max-content;
+      padding: 0.6rem 0;
+    }
+
+    .video-card {
+      flex: 0 0 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      cursor: pointer;
+      scroll-snap-align: center;
+      transition: transform 0.3s ease;
+    }
+    .video-card:hover { transform: translateY(-4px); }
+
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 1rem;
+      overflow: hidden;
+      border: 1px solid rgba(var(--theme-accent-rgb), 0.3);
+      background: #050a10;
+      box-shadow:
+        0 12px 28px -8px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .video-card:hover .video-frame {
+      border-color: rgba(var(--theme-accent-rgb), 0.6);
+      box-shadow:
+        0 18px 40px -8px rgba(0, 0, 0, 0.7),
+        0 0 30px -5px rgba(var(--theme-accent-rgb), 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .video-frame video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-poster {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 0.35s ease;
+      z-index: 2;
+    }
+    .video-poster::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 30% 30%, rgba(var(--theme-accent-rgb), 0.25), transparent 55%),
+        repeating-linear-gradient(45deg,
+          rgba(var(--theme-accent-rgb), 0.04) 0px,
+          rgba(var(--theme-accent-rgb), 0.04) 1px,
+          transparent 1px,
+          transparent 14px);
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+    .video-poster::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0a1428 0%, #071424 50%, #0d1f33 100%);
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      z-index: -1;
+    }
+    .video-poster.has-frame::before,
+    .video-poster.has-frame::after {
+      opacity: 0;
+    }
+    .video-card.playing .video-poster { opacity: 0; pointer-events: none; }
+
+    .poster-play {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: rgba(var(--theme-accent-rgb), 0.22);
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, background 0.3s ease;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+    .poster-play svg {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+      margin-left: 3px;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+    }
+    .video-card:hover .poster-play {
+      transform: scale(1.12);
+      background: rgba(var(--theme-accent-rgb), 0.45);
+    }
+
+    .poster-num {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+      z-index: 2;
+    }
+    .poster-badge {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(var(--theme-accent-rgb), 0.2);
+      color: var(--theme-accent);
+      border: 1px solid rgba(var(--theme-accent-rgb), 0.4);
+      z-index: 2;
+    }
+
+    .expand-hint {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      z-index: 4;
+      pointer-events: none;
+    }
+    .expand-hint svg {
+      width: 15px;
+      height: 15px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .video-card:hover .expand-hint { opacity: 1; }
+
+    .preview-loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 26px;
+      height: 26px;
+      margin: -13px 0 0 -13px;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-top-color: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      animation: previewSpin 0.8s linear infinite;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 3;
+    }
+    .video-card.loading-preview .preview-loader { opacity: 1; }
+    .video-card.has-preview .preview-loader,
+    .video-card.preview-error .preview-loader { opacity: 0; }
+    @keyframes previewSpin { to { transform: rotate(360deg); } }
+
+    .video-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 0 0.2rem;
+    }
+    .video-meta h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.2px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.35;
+      min-height: 2.7em;
+    }
+    .video-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: radial-gradient(ellipse at center, rgba(10, 14, 23, 0.97) 0%, rgba(0, 0, 0, 0.99) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1rem, 4vw, 3rem);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      overscroll-behavior: contain;
+    }
+    .video-modal.open { opacity: 1; visibility: visible; }
+
+    .modal-content {
+      position: relative;
+      width: 100%;
+      max-width: min(1200px, 92vw);
+      max-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: scale(0.92);
+      transition: transform 0.35s cubic-bezier(.2, .8, .3, 1);
+    }
+    .video-modal.open .modal-content { transform: scale(1); }
+
+    .modal-content video {
+      width: 100%;
+      height: auto;
+      max-height: 88vh;
+      border-radius: 14px;
+      background: #000;
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+      outline: none;
+      display: block;
+    }
+    .video-modal[data-theme="info"] .modal-content video {
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 50px -5px rgba(61, 125, 255, 0.45);
+    }
+    .video-modal[data-theme="ai"] .modal-content video {
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 50px -5px rgba(167, 139, 250, 0.45);
+    }
+
+    .modal-close,
+    .modal-fs {
+      position: absolute;
+      top: clamp(12px, 2.5vw, 24px);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, transform 0.25s ease, border-color 0.2s ease;
+      z-index: 3;
+      padding: 0;
+    }
+    .modal-close { right: clamp(12px, 2.5vw, 24px); }
+    .modal-fs    { right: calc(clamp(12px, 2.5vw, 24px) + 62px); }
+    .modal-close:hover,
+    .modal-fs:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .modal-close:hover { transform: rotate(90deg); }
+    .modal-fs:hover    { transform: scale(1.1); }
+    .modal-close svg, .modal-fs svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @media (max-width: 680px) {
+      .video-section { padding: 2.2rem 1rem; gap: 1.8rem; }
+      .video-card { flex: 0 0 280px; }
+      .poster-play { width: 54px; height: 54px; }
+      .poster-play svg { width: 20px; height: 20px; }
+      .video-meta h4 { font-size: 0.92rem; }
+      .carousel-with-nav { padding: 0 40px; }
+      .carousel-nav { width: 38px; height: 38px; }
+      .carousel-nav svg { width: 18px; height: 18px; }
+      .modal-close, .modal-fs { width: 42px; height: 42px; }
+      .modal-fs { right: calc(clamp(12px, 2.5vw, 24px) + 52px); }
+      .modal-close svg, .modal-fs svg { width: 18px; height: 18px; }
+    }
+    @media (max-width: 480px) {
+      .video-card { flex: 0 0 260px; }
+      .carousel-icon { width: 34px; height: 34px; font-size: 1rem; }
+      .carousel-with-nav { padding: 0 36px; }
+      .carousel-nav { width: 34px; height: 34px; }
+      .carousel-nav svg { width: 16px; height: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .v-aurora,
+      .video-heading h2,
+      .video-heading,
+      .video-carousel-wrapper {
+        animation: none !important;
+      }
+      .video-carousel { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <section class="video-section">
+    <div class="video-bg-fx">
+      <div class="v-aurora v-aurora-1"></div>
+      <div class="v-aurora v-aurora-2"></div>
+    </div>
+
+    <div class="video-heading">
+      <h2>Videos &amp; IA</h2>
+      <div class="sub">Producción audiovisual · contenido generativo</div>
+    </div>
+
+    <div class="video-carousel-wrapper" data-theme="info">
+      <div class="carousel-header">
+        <div class="carousel-icon">🎬</div>
+        <div class="carousel-title-block">
+          <span class="carousel-label">Informativos</span>
+          <span class="carousel-desc">Contenido original</span>
+        </div>
+        <div class="carousel-line"></div>
+      </div>
+      <div class="carousel-with-nav">
+        <button class="carousel-nav prev" aria-label="Videos anteriores">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="video-carousel" data-carousel="info">
+          <div class="video-track" id="trackInformativos"></div>
+        </div>
+        <button class="carousel-nav next" aria-label="Videos siguientes">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="video-carousel-wrapper" data-theme="ai">
+      <div class="carousel-header">
+        <div class="carousel-icon">✨</div>
+        <div class="carousel-title-block">
+          <span class="carousel-label">Generados con IA</span>
+          <span class="carousel-desc">Inteligencia artificial</span>
+        </div>
+        <div class="carousel-line"></div>
+      </div>
+      <div class="carousel-with-nav">
+        <button class="carousel-nav prev" aria-label="Videos anteriores">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="video-carousel" data-carousel="ai">
+          <div class="video-track" id="trackIA"></div>
+        </div>
+        <button class="carousel-nav next" aria-label="Videos siguientes">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="modal-fs" id="modalFs" aria-label="Pantalla completa">
+      <svg viewBox="0 0 24 24">
+        <polyline points="15 3 21 3 21 9"/>
+        <polyline points="9 21 3 21 3 15"/>
+        <line x1="21" y1="3" x2="14" y2="10"/>
+        <line x1="3" y1="21" x2="10" y2="14"/>
+      </svg>
+    </button>
+    <button class="modal-close" id="modalClose" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <div class="modal-content">
+      <video id="modalVideo" controls playsinline webkit-playsinline preload="none"></video>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    /* ============================================================
+       📌 CONFIG
+       ============================================================ */
+    const informativeVideos = [
+      {
+        title: 'Por Qué los Europeos Ricos Cubren sus Casas con Cobre Puro',
+        sub: 'Curiosidades · Arquitectura',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Por%20Qu%C3%A9%20los%20Europeos%20Ricos%20Cubren%20sus%20Casas%20con%20Cobre%20Puro.mp4',
+        poster: ''
+      },
+      {
+        title: 'Este País te Obliga a Hacer Maquetas de los Edificios',
+        sub: 'Urbanismo · Normativas',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Este%20PA%C3%8DS%20te%20obliga%20a%20hacer%20MAQUETAS%20de%20los%20EDIFICIOS.mp4',
+        poster: ''
+      },
+      {
+        title: 'Este Invento Hace Que Cualquier Gafa Sea Graduada',
+        sub: 'Tecnología · Innovación',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Este%20Invento%20Hace%20Que%20Cualquier%20Gafa%20Sea%20Graduada.mp4',
+        poster: ''
+      },
+      {
+        title: 'Con un Truco de 200 IQ, Este Escalador Venció lo Imposible',
+        sub: 'Deporte · Superación',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Con_un_truco_de_200_IQ%2C_este_escalador_venci%C3%B3_lo_imposible_%23shor.mp4',
+        poster: ''
+      },
+      {
+        title: 'En la Antigua China, los Certificados de Matrimonio se Grababan',
+        sub: 'Historia · Cultura',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/En_la_antigua_China%2C_los_certificados_de_matrimonio_se_grababan.mp4',
+        poster: ''
+      },
+      {
+        title: 'Todos Se Equivocaron... Menos Jack Miller',
+        sub: 'Historia · Personajes',
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Todos%20Se%20Equivocaron...%20Menos%20Jack%20Miller!.mp4',
+        poster: ''
+      }
+    ];
+
+    const aiVideos = [
+      { 
+        title: 'Generación Visual y Diseño con IA', 
+        sub: 'Inteligencia Artificial · Creatividad', 
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/dlls_e9f295ef9af0401194571c70ca54cc6b.mp4', 
+        poster: '' 
+      },
+      { 
+        title: 'Si vas a construir tu casa en el campo, DEBES ver este diseño', 
+        sub: 'Arquitectura · IA Generativa', 
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Si_vas_a_construir_tu_casa_en_el_campo%2C_DEBES_ver_este_dise%C3%B1o_in.mp4', 
+        poster: '' 
+      },
+      { 
+        title: 'QUÉ HACE LA CREATINA en tu cuerpo: La ciencia detrás de tus músculos', 
+        sub: 'Salud · Ciencia', 
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/QU%C3%89_HACE_LA_CREATINA_en_tu_cuerpo_La_ciencia_detr%C3%A1s_de_tus_m%C3%BAs.mp4', 
+        poster: '' 
+      },
+      { 
+        title: 'Qué pasa realmente cuando tomas un antibiótico', 
+        sub: 'Medicina · Cuerpo Humano', 
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/Que_pasa_realmente_cuando_tomas_un_antibiotico_%23cuerpohumano_%23.mp4', 
+        poster: '' 
+      },
+      { 
+        title: 'El refresco de vidrio sí sabe más rico, y no es nostalgia', 
+        sub: 'Ciencia · Curiosidades', 
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/El_refresco_de_vidrio_s%C3%AD_sabe_m%C3%A1s_rico%2C_y_no_es_nostalgia_es_la.mp4', 
+        poster: '' 
+      },
+      { 
+        title: 'How the First Combat Submarine Actually Worked', 
+        sub: 'Historia · Ingeniería', 
+        src: 'https://file.garden/aicj-LWBZTmGA5zi/How_the_First_Combat_Submarine_Actually_Worked_%23engineering_%23his.mp4', 
+        poster: '' 
+      }
+    ];
+
+    const isDesktopHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const isMobile = window.matchMedia('(max-width: 680px)').matches;
+    const MAX_PREVIEWS_PER_CAROUSEL = isMobile ? 3 : 99;
+
+    /* ============================================================
+       RENDER
+       ============================================================ */
+    function buildVideoCard(video, index, type) {
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      card.dataset.type = type;
+      card.dataset.src = video.src;
+      if (video.previewTime) card.dataset.previewTime = video.previewTime;
+
+      const num = String(index + 1).padStart(2, '0');
+      const badgeLabel = type === 'ai' ? 'IA' : 'Info';
+      const posterStyle = video.poster
+        ? `background-image:url('${video.poster}');background-size:cover;background-position:center;`
+        : '';
+
+      card.innerHTML = `
+        <div class="video-frame">
+          <video
+            src="${video.src}"
+            preload="none"
+            muted
+            loop
+            playsinline
+            ${video.poster ? `poster="${video.poster}"` : ''}
+          ></video>
+          <div class="video-poster" style="${posterStyle}">
+            <div class="poster-num">#${num}</div>
+            <div class="poster-badge">${badgeLabel}</div>
+            <div class="poster-play">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="preview-loader"></div>
+          <div class="expand-hint" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <polyline points="15 3 21 3 21 9"/>
+              <polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/>
+              <line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>${video.title}</h4>
+          <span class="video-sub">${video.sub || ''}</span>
+        </div>
+      `;
+      return card;
+    }
+
+    const previewCounts = { info: 0, ai: 0 };
+
+    function renderCarousel(trackId, videos, type) {
+      const track = document.getElementById(trackId);
+      if (!track) return;
+      const frag = document.createDocumentFragment();
+      videos.forEach((video, i) => frag.appendChild(buildVideoCard(video, i, type)));
+      track.appendChild(frag);
+    }
+
+    renderCarousel('trackInformativos', informativeVideos, 'info');
+    renderCarousel('trackIA', aiVideos, 'ai');
+
+    /* ============================================================
+       PREVIEW AUTOMÁTICO
+       ============================================================ */
+    function setupPreview(card) {
+      if (card.dataset.previewLoaded === 'true') return;
+      card.dataset.previewLoaded = 'true';
+
+      if (card.dataset.src.includes('REPLACE_')) return;
+
+      const video = card.querySelector('video');
+      const poster = card.querySelector('.video-poster');
+      if (!video || !poster) return;
+
+      card.classList.add('loading-preview');
+      video.preload = 'metadata';
+
+      const onMeta = () => {
+        const duration = video.duration;
+        if (!duration || !isFinite(duration)) return;
+
+        let targetTime;
+        if (card.dataset.previewTime) {
+          targetTime = parseFloat(card.dataset.previewTime);
+        } else {
+          targetTime = Math.min(Math.max(duration * 0.15, 0.3), 3);
+        }
+        targetTime = Math.min(targetTime, Math.max(duration - 0.2, 0));
+        try { video.currentTime = targetTime; } catch (e) {}
+      };
+
+      const onSeeked = () => {
+        card.classList.remove('loading-preview');
+        card.classList.add('has-preview');
+        poster.classList.add('has-frame');
+        cleanup();
+      };
+
+      const onError = () => {
+        card.classList.remove('loading-preview');
+        card.classList.add('preview-error');
+        cleanup();
+      };
+
+      const cleanup = () => {
+        video.removeEventListener('loadedmetadata', onMeta);
+        video.removeEventListener('seeked', onSeeked);
+        video.removeEventListener('error', onError);
+      };
+
+      video.addEventListener('loadedmetadata', onMeta, { once: true });
+      video.addEventListener('seeked', onSeeked, { once: true });
+      video.addEventListener('error', onError, { once: true });
+
+      video.load();
+    }
+
+    const previewObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const card = entry.target;
+        const type = card.dataset.type;
+        previewObserver.unobserve(card);
+
+        if (previewCounts[type] >= MAX_PREVIEWS_PER_CAROUSEL) return;
+        previewCounts[type]++;
+        setupPreview(card);
+      });
+    }, { rootMargin: '300px' });
+
+    document.querySelectorAll('.video-card').forEach(card => {
+      previewObserver.observe(card);
+    });
+
+    /* ============================================================
+       MODAL
+       ============================================================ */
+    const modal = document.getElementById('videoModal');
+    const modalVideo = document.getElementById('modalVideo');
+    const modalClose = document.getElementById('modalClose');
+    const modalFs = document.getElementById('modalFs');
+    let lastFocused = null;
+
+    function openModal(src, theme) {
+      lastFocused = document.activeElement;
+
+      document.querySelectorAll('.video-card video').forEach(v => {
+        try { v.pause(); } catch (e) {}
+      });
+      document.querySelectorAll('.video-card.playing').forEach(c => c.classList.remove('playing'));
+
+      modal.dataset.theme = theme || 'info';
+      modalVideo.src = src;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      requestAnimationFrame(() => {
+        const p = modalVideo.play();
+        if (p && p.catch) p.catch(() => {});
+      });
+
+      setTimeout(() => modalClose.focus(), 100);
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+
+      try { modalVideo.pause(); } catch (e) {}
+      modalVideo.removeAttribute('src');
+      try { modalVideo.load(); } catch (e) {}
+
+      if (isDesktopHover) {
+        document.querySelectorAll('.video-card').forEach(card => {
+          if (card.matches(':hover')) {
+            const v = card.querySelector('video');
+            if (v) {
+              const p = v.play();
+              if (p && p.catch) p.catch(() => {});
+            }
+          }
+        });
+      }
+
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+
+    modalFs.addEventListener('click', () => {
+      const v = modalVideo;
+      if (v.requestFullscreen) {
+        v.requestFullscreen().catch(() => {});
+      } else if (v.webkitEnterFullscreen) {
+        v.webkitEnterFullscreen();
+      } else if (v.webkitRequestFullscreen) {
+        v.webkitRequestFullscreen();
+      } else if (v.msRequestFullscreen) {
+        v.msRequestFullscreen();
+      }
+    });
+
+    /* ============================================================
+       INTERACCIÓN
+       ============================================================ */
+    const cards = document.querySelectorAll('.video-card');
+
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          const video = entry.target.querySelector('video');
+          if (video && !video.paused) {
+            try { video.pause(); } catch (e) {}
+          }
+        }
+      });
+    }, { threshold: 0 });
+
+    function pauseOthers(exceptCard) {
+      document.querySelectorAll('.video-card.playing').forEach(c => {
+        if (c !== exceptCard) {
+          const v = c.querySelector('video');
+          if (v) { try { v.pause(); } catch (e) {} }
+          c.classList.remove('playing');
+        }
+      });
+    }
+
+    cards.forEach(card => {
+      const video = card.querySelector('video');
+      if (!video) return;
+
+      visibilityObserver.observe(card);
+
+      video.addEventListener('playing', () => card.classList.add('playing'));
+      video.addEventListener('pause',   () => card.classList.remove('playing'));
+
+      if (isDesktopHover) {
+        card.addEventListener('mouseenter', () => {
+          pauseOthers(card);
+          const p = video.play();
+          if (p && p.catch) p.catch(() => {});
+        });
+        card.addEventListener('mouseleave', () => {
+          try { video.pause(); } catch (e) {}
+        });
+      }
+
+      card.addEventListener('click', () => {
+        openModal(card.dataset.src, card.dataset.type);
+      });
+    });
+
+    /* ============================================================
+       FLECHITAS
+       ============================================================ */
+    document.querySelectorAll('.carousel-with-nav').forEach(nav => {
+      const prevBtn = nav.querySelector('.carousel-nav.prev');
+      const nextBtn = nav.querySelector('.carousel-nav.next');
+      const carousel = nav.querySelector('.video-carousel');
+      const track = nav.querySelector('.video-track');
+      if (!carousel || !track) return;
+
+      function getScrollAmount() {
+        const card = track.querySelector('.video-card');
+        if (!card) return 300;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const cardW = card.offsetWidth + gap;
+        const visible = Math.floor(carousel.clientWidth / cardW);
+        const step = Math.max(1, Math.min(visible, 2));
+        return cardW * step;
+      }
+
+      prevBtn.addEventListener('click', () => {
+        carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', () => {
+        carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+      });
+
+      function updateArrows() {
+        const sl = carousel.scrollLeft;
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        prevBtn.disabled = sl <= 4;
+        nextBtn.disabled = sl >= maxScroll - 4;
+      }
+
+      carousel.addEventListener('scroll', updateArrows, { passive: true });
+      window.addEventListener('resize', updateArrows);
+      updateArrows();
+    });
+
+    /* ✅ MAGIA: Envía la altura real al index.html para que el iframe se adapte y no se corte */
+    const resizeObserver = new ResizeObserver(() => {
+      window.parent.postMessage({ iframeHeight: document.documentElement.scrollHeight }, '*');
+    });
+    resizeObserver.observe(document.body);
+
+  })();
+  </script>
+</body>
+</html>
